@@ -222,6 +222,9 @@ elseif(WIN32)
         PROPERTY COMPILE_DEFINITIONS
             "PY3_DLLNAME=${_wide_char_modifier}\"python3$<$<CONFIG:Debug>:_d>\"" # Python 3.11
         )
+    if(MSVC)
+        add_compile_options(/wd4101 /wd4018 /wd4244 /wd4996)
+    endif()
 endif()
 
 set(PYTHON_COMMON_SOURCES
