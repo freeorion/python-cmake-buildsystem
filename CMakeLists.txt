@@ -708,7 +708,7 @@ endif()
 
 # Add target to run "Argument Clinic" over all source files
 add_custom_target(clinic
-    COMMAND python ${SRC_DIR}/Tools/clinic/clinic.py --make
+    COMMAND python -B ${SRC_DIR}/Tools/clinic/clinic.py --make
     DEPENDS python
     WORKING_DIRECTORY ${SRC_DIR}
     COMMENT "Running 'Argument Clinic' over all source files"
@@ -776,7 +776,7 @@ endif()
 
 # Add target to generate 'opcode.h' header file
 add_custom_target(generate_opcode_h
-    COMMAND python ${SRC_DIR}/Tools/scripts/generate_opcode_h.py
+    COMMAND python -B ${SRC_DIR}/Tools/scripts/generate_opcode_h.py
         ${SRC_DIR}/Lib/opcode.py
         ${PROJECT_BINARY_DIR}/CMakeFiles/opcode.h
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -790,7 +790,7 @@ add_custom_target(generate_opcode_h
 
 # Add target to generate 'Include/Python-ast.h' from 'Python.asdl'
 add_custom_target(generate_python_ast_h
-    COMMAND python ${SRC_DIR}/Parser/asdl_c.py
+    COMMAND python -B ${SRC_DIR}/Parser/asdl_c.py
         -h ${SRC_DIR}/Include
         ${SRC_DIR}/Parser/Python.asdl
     DEPENDS python
@@ -801,7 +801,7 @@ add_custom_target(generate_python_ast_h
 
 # Add target to generate 'Python/Python-ast.c' from 'Python.asdl'
 add_custom_target(generate_python_ast_c
-    COMMAND python ${SRC_DIR}/Parser/asdl_c.py
+    COMMAND python -B ${SRC_DIR}/Parser/asdl_c.py
         -c ${SRC_DIR}/Python
         ${SRC_DIR}/Parser/Python.asdl
     DEPENDS python
@@ -901,7 +901,7 @@ if(BUILD_TESTING)
     )
     set(TESTPROG ${PROJECT_BINARY_DIR}/${PYTHONHOME}/test/regrtest.py)
     set(TESTPYTHONOPTS )
-      set(TESTPYTHON $<TARGET_FILE:python> ${TESTPYTHONOPTS})
+      set(TESTPYTHON $<TARGET_FILE:python> -B ${TESTPYTHONOPTS})
     set(TESTPYTHON ${CMAKE_CROSSCOMPILING_EMULATOR} ${TESTPYTHON})
     include(cmake/UnitTests.cmake)
     foreach(unittest ${unittests})
