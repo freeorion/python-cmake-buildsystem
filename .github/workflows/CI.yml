@@ -64,32 +64,10 @@ jobs:
     runs-on: ${{ matrix.host }}
     strategy:
       matrix:
-        ndk-arch: [x86_64]
-        arch: [x86_64]
-        api-level: [21]
-        target: [default]
+        ndk-arch: [x86_64, arm64-v8a, x86, armeabi-v7a]
         host: [ubuntu-24.04]
-        python-version: [3.10.17]
-        include:
-          - ndk-arch: arm64-v8a
-            arch: x86_64
-            api-level: 30
-            target: google_apis
-            host: ubuntu-24.04
-            python-version: 3.10.17
-          - ndk-arch: x86
-            arch: x86
-            api-level: 21
-            target: default
-            host: ubuntu-24.04
-            python-version: 3.10.17
-          - ndk-arch: armeabi-v7a
-            arch: x86_64
-            api-level: 30
-            target: google_apis
-            host: ubuntu-24.04
-            python-version: 3.10.17
-    name: python-android-${{ matrix.python-version }}-${{ matrix.host }}
+        python-version: [3.8.20, 3.9.22, 3.10.17]
+    name: python-android-${{ matrix.ndk-arch }}-${{ matrix.python-version }}-${{ matrix.host }}
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
@@ -107,9 +85,9 @@ jobs:
     - name: run action
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: ${{ matrix.api-level }}
-        target: ${{ matrix.target }}
-        arch: ${{ matrix.arch }}
+        api-level: ${{ startsWith(matrix.ndk-arch, 'x86') && 21 || 30 }}
+        target: ${{ startsWith(matrix.ndk-arch, 'x86') && 'default' || 'google_apis' }}
+        arch: ${{ matrix.ndk-arch == 'x86' && 'x86' || 'x86_64' }}
         profile: Galaxy Nexus
         cores: 2
         ram-size: 2048M
