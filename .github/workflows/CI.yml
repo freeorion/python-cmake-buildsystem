@@ -99,7 +99,6 @@ jobs:
         disable-animations: true
         working-directory: build/
         ndk: 23.0.7421159
-        cmake: 3.10.2.4988404
         channel: beta
         script: |
           adb devices
