@@ -19,9 +19,9 @@ if(_match STREQUAL "")
   message(FATAL_ERROR "Environment variable 'PY_VERSION' is improperly set.")
 endif()
 
-set(CTEST_SITE "circleci-window")
-set(CTEST_DASHBOARD_ROOT $ENV{CIRCLE_WORKING_DIRECTORY}/..)
-set(CTEST_SOURCE_DIRECTORY $ENV{CIRCLE_WORKING_DIRECTORY})
+set(CTEST_SITE "github-actions-window")
+set(CTEST_DASHBOARD_ROOT $ENV{GITHUB_WORKSPACE})
+set(CTEST_SOURCE_DIRECTORY $ENV{GITHUB_WORKSPACE}/src)
 
 set(CTEST_CONFIGURATION_TYPE $ENV{CONFIGURATION})
 set(CTEST_CMAKE_GENERATOR "$ENV{GENERATOR}")
@@ -31,16 +31,17 @@ set(CTEST_BUILD_FLAGS "/m")
 set(CTEST_TEST_ARGS PARALLEL_LEVEL 8)
 
 # Build name
-string(SUBSTRING $ENV{CIRCLE_SHA1} 0 7 commit)
-set(what "#$ENV{CIRCLE_PR_NUMBER}")
-if("$ENV{CIRCLE_PR_NUMBER}" STREQUAL "")
-  set(what "$ENV{CIRCLE_BRANCH}")
+# Build name
+string(SUBSTRING $ENV{GITHUB_SHA} 0 7 commit)
+set(what "#$ENV{GITHUB_HEAD_REF}")
+if("$ENV{GITHUB_HEAD_REF}" STREQUAL "")
+  set(what "$ENV{GITHUB_REF_NAME}")
 endif()
 set(CTEST_BUILD_NAME "${PY_VERSION}-${CTEST_CMAKE_GENERATOR_PLATFORM}-${CTEST_CONFIGURATION_TYPE}_${what}_${commit}")
 
 set(dashboard_binary_name build)
 set(dashboard_model Experimental)
-set(dashboard_track Circle-CI-Windows)
+set(dashboard_track GitHub-Actions)
 
 set(dashboard_cache "BUILD_LIBPYTHON_SHARED:BOOL=ON
 PYTHON_VERSION:STRING=${PY_VERSION}
