@@ -176,12 +176,42 @@ jobs:
       env:
         PY_VERSION: ${{ matrix.python-version }}
 
+  tests-windows:
+    name: python-${{ matrix.python-version }}-win-${{ matrix.python-arch }}
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        python-arch: [x64]
+        python-version: [3.6.15, 3.7.17, 3.8.20, 3.9.22, 3.10.17, 3.11.12, 3.12.10]
+        generator: ["Visual Studio 16 2019"]
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        fetch-depth: 0
+        path: src
+    - name: Download dashboard script
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        repository: 'python-cmake-buildsystem/python-cmake-buildsystem'
+        ref: dashboard
+        fetch-depth: 0
+        path: scripts
+    - name: Build & Test
+      run: ctest -C $Env:CONFIGURATION -S scripts/circle_win_dashboard.cmake -VV
+      env:
+           PY_VERSION: ${{ matrix.python-version }}
+           CONFIGURATION: Release
+           GENERATOR: ${{ matrix.generator }}
+           PLATFORM: ${{ matrix.python-arch }}
+
   pass: # This job does nothing and is only used for the branch protection
     if: always()
     needs:
     - tests
     - tests-android
     - tests-linux
+    - tests-windows
 
     runs-on: ubuntu-latest
 
