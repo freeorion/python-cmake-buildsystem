@@ -373,7 +373,7 @@ add_python_extension(_xxtestfuzz
         _xxtestfuzz/fuzzer.c
 )
 
-if (NOT ANDROID)
+if (NOT ANDROID AND NOT WIN32)
     # Python 3.8
     set(_wide_char_modifier "L")
     add_python_extension(_testinternalcapi

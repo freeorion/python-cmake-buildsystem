@@ -1,4 +1,3 @@
-* ``0001-_bootstrap_python-Fix-execution-on-windows-disabling.patch``: _bootstrap_python: Fix execution on windows disabling site import.
 * ``0001-Prevent-incorrect-include-of-io.h-found-in-libmpdec-.patch``: Rename header files found in
   ``Modules/_decimal/libmpdec`` directory to avoid conflicts with system headers of the same name.
 
